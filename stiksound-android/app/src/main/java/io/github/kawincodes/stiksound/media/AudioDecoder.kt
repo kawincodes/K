@@ -1,5 +1,6 @@
 package io.github.kawincodes.stiksound.media
 
+import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.MediaCodec
 import android.media.MediaDataSource
@@ -85,6 +86,7 @@ object AudioDecoder {
             } ?: throw StikSoundException(ErrorCode.UNSUPPORTED_AUDIO, "No audio track found in this file.")
             extractor.selectTrack(trackIndex)
             val inputFormat = extractor.getTrackFormat(trackIndex)
+            dropImplausibleEncoderDelay(inputFormat)
             val mime = inputFormat.getString(MediaFormat.KEY_MIME)!!
             if (inputFormat.containsKey(MediaFormat.KEY_DURATION)) {
                 val durationUs = inputFormat.getLong(MediaFormat.KEY_DURATION)
@@ -180,6 +182,31 @@ object AudioDecoder {
             runCatching { codec?.release() }
             extractor.release()
         }
+    }
+
+    /**
+     * Largest decoder priming delay we trust, in samples. Real AAC, MP3 and Opus priming is
+     * at most a few thousand samples (AAC-LC 1024 or 2112, Opus 3840 at most).
+     */
+    private const val MAX_PLAUSIBLE_ENCODER_DELAY = 8192
+
+    /**
+     * Android 9 and older misread the MP4 edit list that ffmpeg and other tools write for
+     * AAC priming: 1024 priming samples come back as `encoder-delay` 49152, and the decoder
+     * then silently drops the first second of audio. When the delay is implausible, decode
+     * from the very first sample instead (at worst ~20 ms of near-silent priming is kept).
+     * Returns true when the format was changed.
+     *
+     * KEY_ENCODER_DELAY ("encoder-delay") only became a public constant in API 30, but the key
+     * itself is what older releases use, and those are exactly the releases with the bug.
+     */
+    @SuppressLint("InlinedApi")
+    internal fun dropImplausibleEncoderDelay(format: MediaFormat): Boolean {
+        if (!format.containsKey(MediaFormat.KEY_ENCODER_DELAY)) return false
+        val delay = runCatching { format.getInteger(MediaFormat.KEY_ENCODER_DELAY) }.getOrDefault(0)
+        if (delay <= MAX_PLAUSIBLE_ENCODER_DELAY) return false
+        format.setInteger(MediaFormat.KEY_ENCODER_DELAY, 0)
+        return true
     }
 
     /** Waveform peaks for the editor. */

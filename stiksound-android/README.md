@@ -47,8 +47,9 @@ Minimum Android version: 8.0 (API 26). Target: API 36.
   - `EditorFlowTest` drives the real Compose screens and ViewModel. It loads files through content Uris, drags the crop and the trim window, switches 5s/10s, exports MP4 and WebP through the buttons, checks the share intent, and checks error messages.
   - `MediaPipelineJvmTest` covers sticker decoding and WebP encoding with real Skia (Robolectric native graphics). It runs the app's MediaCodec loops with deterministic fake codecs (`FakeCodecs`) and checks frame count, timestamps, crop, matte and BT.601 colors per frame, GIF frame timing, exact audio length, track interleaving, stereo downmix, and preview playback.
   - `ScreenshotTest` renders the editor and result screens to `app/build/screenshots/*.png`.
-- **Instrumented tests (`app/src/androidTest`)** cover what Robolectric can't: real H.264/AAC encoding, MP4 muxing and MP3/M4A/OGG decoding on a device. They check tracks, size, duration and decoded pixel colors.
-- **CI:** `.github/workflows/stiksound-android.yml` runs all of the above, including the instrumented tests on API 29 and API 34 emulators.
+- **Instrumented tests (`app/src/androidTest`)** cover what Robolectric can't: real H.264/AAC encoding, MP4 muxing and MP3/M4A/OGG decoding on a device. They check tracks, size, duration and decoded pixel colors. They found an Android 9 bug: an ffmpeg-made M4A came back with a bogus 1-second `encoder-delay`, and the decoder dropped the start of the audio. `AudioDecoder` now ignores implausible delays. To run these tests from prebuilt APKs without Gradle:
+  `scripts/run-instrumented-tests.sh app-debug.apk app-debug-androidTest.apk`
+- **CI:** `.github/workflows/stiksound-android.yml` runs all of the above. The build job makes the APKs once, and the instrumented tests run on API 28 and API 34 emulators.
 
 ## Layout
 

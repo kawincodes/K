@@ -304,6 +304,24 @@ class MediaPipelineJvmTest {
     }
 
     @Test
+    fun ignoresTheBogusEncoderDelayAndroid9ReportsForEditLists() {
+        // What Android 9's MP4 extractor reports for an ffmpeg-made M4A with 1024 priming samples.
+        val bogus = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, 48_000, 1)
+            .apply { setInteger(MediaFormat.KEY_ENCODER_DELAY, 49_152) }
+        assertTrue(AudioDecoder.dropImplausibleEncoderDelay(bogus))
+        assertEquals(0, bogus.getInteger(MediaFormat.KEY_ENCODER_DELAY))
+
+        // Real priming delays are left alone.
+        for (delay in listOf(1024, 2112, 3840)) {
+            val real = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, 48_000, 1)
+                .apply { setInteger(MediaFormat.KEY_ENCODER_DELAY, delay) }
+            assertFalse(AudioDecoder.dropImplausibleEncoderDelay(real))
+            assertEquals(delay, real.getInteger(MediaFormat.KEY_ENCODER_DELAY))
+        }
+        assertFalse(AudioDecoder.dropImplausibleEncoderDelay(MediaFormat.createAudioFormat("audio/mpeg", 44_100, 2)))
+    }
+
+    @Test
     fun decodesWavWithoutMediaCodec() = runBlocking {
         val pcm = tone(800, rate = 22_050)
         val decoded = AudioDecoder.decode(Wav.encodeMono16(pcm))

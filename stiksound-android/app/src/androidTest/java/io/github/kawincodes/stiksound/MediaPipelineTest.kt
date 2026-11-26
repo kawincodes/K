@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -105,12 +106,17 @@ class MediaPipelineTest {
         val failures = mutableListOf<String>()
         for (name in listOf("tone.mp3", "tone.m4a", "tone.ogg")) {
             val pcm = AudioDecoder.decode(asset(name))
+            val info = "$name: ${pcm.samples.size} samples @ ${pcm.sampleRate} Hz = ${pcm.durationMs} ms"
+            Log.i("MediaPipelineTest", info)
+            if (pcm.durationMs !in 1400..1650) {
+                failures += "$info (expected about 1500 ms)"
+                continue
+            }
             val peak = pcm.samples.maxOf { abs(it) }
             val mid = pcm.samples.copyOfRange((0.2 * pcm.sampleRate).toInt(), (1.3 * pcm.sampleRate).toInt())
             val rms = kotlin.math.sqrt(mid.sumOf { (it * it).toDouble() } / mid.size)
-            if (pcm.durationMs !in 1400..1650) failures += "$name duration ${pcm.durationMs}"
-            if (peak !in 0.4f..0.75f) failures += "$name peak $peak"
-            if (rms !in 0.31..0.40) failures += "$name rms $rms"
+            if (peak !in 0.4f..0.75f) failures += "$info, peak $peak"
+            if (rms !in 0.31..0.40) failures += "$info, rms $rms"
         }
         assertTrue(failures.joinToString("; "), failures.isEmpty())
     }
