@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">StikSound</string>
+    <string name="share_target_label">Make a sound sticker</string>
+    <string name="about">About</string>
+    <string name="reset">Start over</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+
+    <!-- Sticker -->
+    <string name="stage_description">Sticker preview. Drag to move the square crop.</string>
+    <string name="stage_empty_title">Add your sticker</string>
+    <string name="stage_empty_hint">PNG, JPG, WebP or animated GIF. Tap to choose, or paste a copied sticker.</string>
+    <string name="pick_image">Choose image</string>
+    <string name="change_image">Change image</string>
+    <string name="paste">Paste</string>
+    <string name="paste_nothing">The clipboard has no image, sound or MyInstants link.</string>
+    <string name="drag_to_frame">%1$s · Drag the picture to frame the 1:1 square</string>
+    <plurals name="sticker_animated_info">
+        <item quantity="one">%1$d frame · %2$s s loop</item>
+        <item quantity="other">%1$d frames · %2$s s loop</item>
+    </plurals>
+
+    <!-- Background -->
+    <string name="background_title">Background</string>
+    <string name="background_hint">MP4 has no transparency, so transparent areas get this color.</string>
+    <string name="matte_white">White</string>
+    <string name="matte_black">Black</string>
+    <string name="matte_color">Color</string>
+    <string name="hex_color">Hex color</string>
+
+    <!-- Audio -->
+    <string name="audio_title">Sound</string>
+    <string name="myinstants_placeholder">Paste a MyInstants link</string>
+    <string name="fetch">Get</string>
+    <string name="pick_audio">Choose audio file (MP3, WAV, M4A, OGG…)</string>
+    <string name="trim_description">Audio selection from %1$s to %2$s seconds. Drag the edges to resize or the middle to move.</string>
+    <string name="selection_range">%1$s – %2$s</string>
+    <string name="selection_length">%1$s s selected of %2$s s</string>
+    <string name="play_preview">Play</string>
+    <string name="stop_preview">Stop</string>
+    <string name="gif_loop_note">The GIF loop is longer than the sound, so the video lasts %1$s s and ends in silence.</string>
+    <string name="max_duration">Max length</string>
+
+    <!-- Export -->
+    <string name="export_title">Create</string>
+    <string name="create_video">Create %1$ds MP4 video</string>
+    <string name="create_webp">Static WebP sticker (512×512, no sound)</string>
+    <string name="exporting">Rendering on your device…</string>
+    <string name="export_needs_sticker">Add a sticker first.</string>
+    <string name="export_needs_audio">Add an audio file or a MyInstants link.</string>
+    <string name="export_busy">Wait for the current task to finish.</string>
+    <string name="whatsapp_note">WhatsApp: as of today, turning the MP4 into a sound sticker only works on Android with WhatsApp Beta, on accounts where Meta has enabled it (Stickers → Create → pick the video from the gallery). Sharing the MP4 into a chat sends it as a regular video.</string>
+
+    <!-- Result -->
+    <string name="result_video_title">Your video</string>
+    <string name="result_webp_title">Your sticker</string>
+    <string name="result_video_info">%1$d×%2$d · %3$s s · %4$s · H.264 + AAC</string>
+    <string name="result_webp_info">512×512 WebP · %1$s</string>
+    <string name="save_to_gallery">Save to gallery</string>
+    <string name="saved">Saved</string>
+    <string name="share">Share</string>
+    <string name="saved_video">Saved to Movies/StikSound.</string>
+    <string name="saved_webp">Saved to Pictures/StikSound.</string>
+    <string name="result_video_note">To try it as a sound sticker: save it to the gallery, open a chat in WhatsApp Beta for Android → Stickers → Create (+) → pick this video. WhatsApp decides the final length and sound; the feature is rolling out gradually and is not officially documented.</string>
+    <string name="result_webp_note">A still WebP sticker without sound, within WhatsApp\'s 100 KB limit.</string>
+
+    <!-- Errors -->
+    <string name="error_unsupported_image">This image can\'t be used. Choose a PNG, JPG, WebP or GIF.</string>
+    <string name="error_unsupported_audio">This audio can\'t be read. Try MP3, WAV, M4A, OGG or AAC.</string>
+    <string name="error_file_too_large">The file is too large. Limits: images 20 MB and 8000 px, GIFs 300 frames, audio 25 MB and 3 minutes.</string>
+    <string name="error_trim">The selection must be between 0.1 s and the chosen max length.</string>
+    <string name="error_url_rejected">Only MyInstants links are supported, like https://www.myinstants.com/en/instant/…</string>
+    <string name="error_remote">Couldn\'t download the sound from MyInstants. Check the link and your connection.</string>
+    <string name="error_codec">This device has no H.264/AAC encoder for the video.</string>
+    <string name="error_encode">Export failed: %1$s</string>
+    <string name="error_generic">Something went wrong: %1$s</string>
+    <string name="error_playback">Couldn\'t play the preview.</string>
+    <string name="error_save">Couldn\'t save to the gallery.</string>
+    <string name="error_save_permission">Storage permission is needed to save on this Android version.</string>
+
+    <!-- About -->
+    <string name="about_title">StikSound for Android %1$s</string>
+    <string name="about_body">Make 5 s or 10 s sound videos from a sticker and a sound. Everything is processed on your device: no accounts, no servers. The only network request is downloading a MyInstants link you paste or share.\n\nAndroid port of StikSound by SilverFeit, released under the MIT or Apache-2.0 license. Sounds from MyInstants remain the property of their owners.</string>
+    <string name="about_upstream">StikSound on GitHub</string>
+</resources>

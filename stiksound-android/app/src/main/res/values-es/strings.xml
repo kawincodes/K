@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_target_label">Crear sticker con sonido</string>
+    <string name="about">Acerca de</string>
+    <string name="reset">Empezar de nuevo</string>
+    <string name="close">Cerrar</string>
+    <string name="back">Atrás</string>
+
+    <string name="stage_description">Vista previa del sticker. Arrastra para mover el recorte cuadrado.</string>
+    <string name="stage_empty_title">Agrega tu sticker</string>
+    <string name="stage_empty_hint">PNG, JPG, WebP o GIF animado. Toca para elegir o pega un sticker copiado.</string>
+    <string name="pick_image">Elegir imagen</string>
+    <string name="change_image">Cambiar imagen</string>
+    <string name="paste">Pegar</string>
+    <string name="paste_nothing">El portapapeles no tiene una imagen, un sonido ni un enlace de MyInstants.</string>
+    <string name="drag_to_frame">%1$s · Arrastra la imagen para encuadrar el cuadrado 1:1</string>
+    <plurals name="sticker_animated_info">
+        <item quantity="one">%1$d fotograma · bucle de %2$s s</item>
+        <item quantity="many">%1$d fotogramas · bucle de %2$s s</item>
+        <item quantity="other">%1$d fotogramas · bucle de %2$s s</item>
+    </plurals>
+
+    <string name="background_title">Fondo</string>
+    <string name="background_hint">El MP4 no admite transparencia, así que las zonas transparentes toman este color.</string>
+    <string name="matte_white">Blanco</string>
+    <string name="matte_black">Negro</string>
+    <string name="matte_color">Color</string>
+    <string name="hex_color">Color hex</string>
+
+    <string name="audio_title">Sonido</string>
+    <string name="myinstants_placeholder">Pega un enlace de MyInstants</string>
+    <string name="fetch">Obtener</string>
+    <string name="pick_audio">Elegir archivo de audio (MP3, WAV, M4A, OGG…)</string>
+    <string name="trim_description">Selección de audio de %1$s a %2$s segundos. Arrastra los bordes para cambiar el tamaño o el centro para moverla.</string>
+    <string name="selection_range">%1$s – %2$s</string>
+    <string name="selection_length">%1$s s seleccionados de %2$s s</string>
+    <string name="play_preview">Reproducir</string>
+    <string name="stop_preview">Detener</string>
+    <string name="gif_loop_note">El bucle del GIF dura más que el sonido, así que el video dura %1$s s y termina en silencio.</string>
+    <string name="max_duration">Duración máxima</string>
+
+    <string name="export_title">Crear</string>
+    <string name="create_video">Crear video MP4 de %1$d s</string>
+    <string name="create_webp">Sticker WebP estático (512×512, sin sonido)</string>
+    <string name="exporting">Renderizando en tu dispositivo…</string>
+    <string name="export_needs_sticker">Agrega un sticker primero.</string>
+    <string name="export_needs_audio">Agrega un audio o un enlace de MyInstants.</string>
+    <string name="export_busy">Espera a que termine la tarea actual.</string>
+    <string name="whatsapp_note">WhatsApp: a día de hoy, convertir el MP4 en un sticker con sonido solo funciona en Android con WhatsApp Beta, en cuentas activadas por Meta (Stickers → Crear → elegir el video de la galería). Si compartes el MP4 en un chat, se envía como un video normal.</string>
+
+    <string name="result_video_title">Tu video</string>
+    <string name="result_webp_title">Tu sticker</string>
+    <string name="result_video_info">%1$d×%2$d · %3$s s · %4$s · H.264 + AAC</string>
+    <string name="result_webp_info">WebP 512×512 · %1$s</string>
+    <string name="save_to_gallery">Guardar en la galería</string>
+    <string name="saved">Guardado</string>
+    <string name="share">Compartir</string>
+    <string name="saved_video">Guardado en Movies/StikSound.</string>
+    <string name="saved_webp">Guardado en Pictures/StikSound.</string>
+    <string name="result_video_note">Para probarlo como sticker con sonido: guárdalo en la galería, abre un chat en WhatsApp Beta para Android → Stickers → Crear (+) → elige este video. WhatsApp decide la duración y el sonido finales; la función se activa de forma gradual y no está documentada oficialmente.</string>
+    <string name="result_webp_note">Un sticker WebP estático sin sonido, dentro del límite de 100 KB de WhatsApp.</string>
+
+    <string name="error_unsupported_image">Esta imagen no se puede usar. Elige un PNG, JPG, WebP o GIF.</string>
+    <string name="error_unsupported_audio">No se puede leer este audio. Prueba con MP3, WAV, M4A, OGG o AAC.</string>
+    <string name="error_file_too_large">El archivo es demasiado grande. Límites: imágenes de 20 MB y 8000 px, GIF de 300 fotogramas, audio de 25 MB y 3 minutos.</string>
+    <string name="error_trim">La selección debe durar entre 0,1 s y la duración máxima elegida.</string>
+    <string name="error_url_rejected">Solo se admiten enlaces de MyInstants, como https://www.myinstants.com/es/instant/…</string>
+    <string name="error_remote">No se pudo descargar el sonido de MyInstants. Revisa el enlace y tu conexión.</string>
+    <string name="error_codec">Este dispositivo no tiene un codificador H.264/AAC para el video.</string>
+    <string name="error_encode">Error al exportar: %1$s</string>
+    <string name="error_generic">Algo salió mal: %1$s</string>
+    <string name="error_playback">No se pudo reproducir la vista previa.</string>
+    <string name="error_save">No se pudo guardar en la galería.</string>
+    <string name="error_save_permission">Se necesita el permiso de almacenamiento para guardar en esta versión de Android.</string>
+
+    <string name="about_title">StikSound para Android %1$s</string>
+    <string name="about_body">Crea videos con sonido de 5 s o 10 s a partir de un sticker y un sonido. Todo se procesa en tu dispositivo: sin cuentas ni servidores. La única petición de red es descargar un enlace de MyInstants que pegues o compartas.\n\nAdaptación para Android de StikSound de SilverFeit, publicado bajo la licencia MIT o Apache-2.0. Los sonidos de MyInstants pertenecen a sus respectivos autores.</string>
+    <string name="about_upstream">StikSound en GitHub</string>
+</resources>
