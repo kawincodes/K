@@ -95,14 +95,24 @@ class MediaPipelineTest {
         assertTrue(msg, abs(Color.blue(expected) - Color.blue(actual)) <= tolerance)
     }
 
+    /**
+     * The fixtures are a 440 Hz sine at amplitude 0.5 on every channel (MP3 is stereo,
+     * M4A and OGG mono), so the decoded mono signal has an RMS of 0.5/√2 ≈ 0.354.
+     * A wrong sample format, channel count or gain would move it far off.
+     */
     @Test
     fun decodesCompressedAudioFormats() = runBlocking {
+        val failures = mutableListOf<String>()
         for (name in listOf("tone.mp3", "tone.m4a", "tone.ogg")) {
             val pcm = AudioDecoder.decode(asset(name))
-            assertTrue("$name duration ${pcm.durationMs}", pcm.durationMs in 1400..1650)
             val peak = pcm.samples.maxOf { abs(it) }
-            assertTrue("$name peak $peak", peak > 0.2f)
+            val mid = pcm.samples.copyOfRange((0.2 * pcm.sampleRate).toInt(), (1.3 * pcm.sampleRate).toInt())
+            val rms = kotlin.math.sqrt(mid.sumOf { (it * it).toDouble() } / mid.size)
+            if (pcm.durationMs !in 1400..1650) failures += "$name duration ${pcm.durationMs}"
+            if (peak !in 0.4f..0.75f) failures += "$name peak $peak"
+            if (rms !in 0.31..0.40) failures += "$name rms $rms"
         }
+        assertTrue(failures.joinToString("; "), failures.isEmpty())
     }
 
     @Test
