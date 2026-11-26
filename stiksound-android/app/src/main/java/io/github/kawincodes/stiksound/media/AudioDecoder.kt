@@ -46,14 +46,21 @@ private class FloatAccumulator(initial: Int = 1 shl 16) {
 object AudioDecoder {
     private const val TIMEOUT_US = 10_000L
 
-    suspend fun decode(bytes: ByteArray): MonoPcm {
+    suspend fun decode(bytes: ByteArray): MonoPcm =
+        decode(bytes) { extractor -> extractor.setDataSource(ByteArrayMediaDataSource(bytes)) }
+
+    /**
+     * [setSource] points the extractor at the data. Production code serves [bytes] from
+     * memory; Robolectric tests point it at a fake source registered with ShadowMediaExtractor.
+     */
+    internal suspend fun decode(bytes: ByteArray, setSource: (MediaExtractor) -> Unit): MonoPcm {
         if (bytes.size > Limits.MAX_AUDIO_BYTES) {
             throw StikSoundException(ErrorCode.FILE_TOO_LARGE, "Audio is larger than 25 MB.")
         }
         val pcm = if (Wav.isWav(bytes)) {
-            runCatching { Wav.decodeToMono(bytes) }.getOrNull() ?: decodeWithMediaCodec(bytes)
+            runCatching { Wav.decodeToMono(bytes) }.getOrNull() ?: decodeWithMediaCodec(setSource)
         } else {
-            decodeWithMediaCodec(bytes)
+            decodeWithMediaCodec(setSource)
         }
         if (pcm.durationMs < Limits.MIN_AUDIO_DURATION_MS) {
             throw StikSoundException(ErrorCode.UNSUPPORTED_AUDIO, "The audio is shorter than 0.1 s or could not be read.")
@@ -64,12 +71,12 @@ object AudioDecoder {
         return pcm
     }
 
-    private suspend fun decodeWithMediaCodec(bytes: ByteArray): MonoPcm {
+    private suspend fun decodeWithMediaCodec(setSource: (MediaExtractor) -> Unit): MonoPcm {
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         try {
             try {
-                extractor.setDataSource(ByteArrayMediaDataSource(bytes))
+                setSource(extractor)
             } catch (e: Exception) {
                 throw StikSoundException(ErrorCode.UNSUPPORTED_AUDIO, "This audio format is not supported.", e)
             }

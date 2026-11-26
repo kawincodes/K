@@ -36,15 +36,18 @@ Minimum Android version: 8.0 (API 26). Target: API 36.
 ## Tests
 
 ```bash
-./gradlew :core:test                   # pure Kotlin logic (57 tests)
-./gradlew :app:testDebugUnitTest       # Robolectric: screenshots of the main screens + helpers
+./gradlew :core:test                       # pure Kotlin logic (57 tests)
+./gradlew :app:testDebugUnitTest           # Robolectric, no device needed (28 tests)
 ./gradlew :app:lintDebug
 ./gradlew :app:connectedDebugAndroidTest   # real codecs; needs a device or emulator
 ```
 
 - **`core` tests** cover the GIF decoder (including a pixel-exact comparison against Pillow's decoding), frame scheduling, crop and trim rules, audio math, WAV, format sniffing, and the MyInstants URL policy, extractor and redirect handling.
-- **`testDebugUnitTest`** renders the editor and result screens to `app/build/screenshots/*.png`.
-- **The instrumented tests** decode MP3/M4A/OGG and render static and GIF stickers to MP4. They check tracks, size, duration and pixel colors. They also check the WebP size limit and that the app launches.
+- **Robolectric tests (`app/src/test`)** run the Android code on the JVM:
+  - `EditorFlowTest` drives the real Compose screens and ViewModel. It loads files through content Uris, drags the crop and the trim window, switches 5s/10s, exports MP4 and WebP through the buttons, checks the share intent, and checks error messages.
+  - `MediaPipelineJvmTest` covers sticker decoding and WebP encoding with real Skia (Robolectric native graphics). It runs the app's MediaCodec loops with deterministic fake codecs (`FakeCodecs`) and checks frame count, timestamps, crop, matte and BT.601 colors per frame, GIF frame timing, exact audio length, track interleaving, stereo downmix, and preview playback.
+  - `ScreenshotTest` renders the editor and result screens to `app/build/screenshots/*.png`.
+- **Instrumented tests (`app/src/androidTest`)** cover what Robolectric can't: real H.264/AAC encoding, MP4 muxing and MP3/M4A/OGG decoding on a device. They check tracks, size, duration and decoded pixel colors.
 - **CI:** `.github/workflows/stiksound-android.yml` runs all of the above, including the instrumented tests on API 29 and API 34 emulators.
 
 ## Layout

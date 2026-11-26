@@ -60,10 +60,13 @@ fun StikSoundApp(vm: EditorViewModel) {
     val snackbar = remember { SnackbarHostState() }
     var showAbout by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(state.message?.id) {
-        val message = state.message ?: return@LaunchedEffect
-        vm.consumeMessage(message.id)
+    val message = state.message
+    LaunchedEffect(message?.id) {
+        if (message == null) return@LaunchedEffect
+        // Clear the message only once the snackbar is gone: clearing it first would change this
+        // effect's key and cancel the snackbar before it is ever seen.
         snackbar.showSnackbar(context.getString(message.resId, *message.args))
+        vm.consumeMessage(message.id)
     }
 
     val storagePermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

@@ -46,9 +46,9 @@ object Mp4Exporter {
     private const val TIMEOUT_US = 10_000L
     private const val YUV_CACHE_BYTES = 48L * 1024 * 1024
 
-    private class EncodedSample(val data: ByteArray, val ptsUs: Long, val flags: Int)
+    internal class EncodedSample(val data: ByteArray, val ptsUs: Long, val flags: Int)
 
-    private class EncodedTrack(val format: MediaFormat, val samples: List<EncodedSample>)
+    internal class EncodedTrack(val format: MediaFormat, val samples: List<EncodedSample>)
 
     suspend fun render(request: VideoRequest, output: File, onProgress: (Float) -> Unit = {}): VideoResult {
         val timeline = FrameScheduler.forSticker(request.sticker.delaysMs, request.durationMs)
@@ -79,7 +79,7 @@ object Mp4Exporter {
             ?: Limits.STICKER_DIMENSION_PX
     }
 
-    private suspend fun encodeVideo(
+    internal suspend fun encodeVideo(
         request: VideoRequest,
         timeline: List<ScheduledFrame>,
         size: Int,
@@ -203,7 +203,7 @@ object Mp4Exporter {
         }
     }
 
-    private fun encodeAudio(pcm: MonoPcm): EncodedTrack {
+    internal fun encodeAudio(pcm: MonoPcm): EncodedTrack {
         val format = MediaFormat.createAudioFormat(AUDIO_MIME, pcm.sampleRate, 1).apply {
             setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC)
             setInteger(MediaFormat.KEY_BIT_RATE, AUDIO_BITRATE)
